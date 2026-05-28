@@ -186,6 +186,7 @@ interactables_update :: proc(real_dt: f32) {
                 } else {
                     ps.aiming = false
                     player.vel = dir * SLINGSHOT_SPEED
+                    player.lock_timer = 0.25
 
                     if slingshots[ps.target_index].breakable {
                         slingshots[ps.target_index].broken = true
@@ -247,6 +248,7 @@ interactables_update :: proc(real_dt: f32) {
         spawn_particles(exit_pos, 12, k2.Color{255, 255, 255, 220}, 200, 0.45, 3)
 
         ps.spiraling = false
+        player.lock_timer = 0.3
     }
 }
 

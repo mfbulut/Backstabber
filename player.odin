@@ -37,8 +37,7 @@ Player :: struct {
     on_wall_right: bool,
     wall_coyote_dir: f32,
     wall_coyote_timer: f32,
-    wall_jump_locked: bool,
-    wall_jump_lock_timer: f32,
+    lock_timer: f32,
 }
 
 History_Frame :: struct {
@@ -122,17 +121,13 @@ player_update :: proc(dt: f32) {
     }
 
     if player.on_ground {
-        player.coyote_timer       = COYOTE_TIME
-        player.wall_jump_locked   = false
-        player.wall_jump_lock_timer = 0
+        player.coyote_timer = COYOTE_TIME
+        player.lock_timer   = 0
     } else {
         player.coyote_timer -= dt
     }
 
-    if player.wall_jump_locked {
-        player.wall_jump_lock_timer -= dt
-        if player.wall_jump_lock_timer <= 0 { player.wall_jump_locked = false }
-    }
+    if player.lock_timer > 0 { player.lock_timer -= dt }
 
     // Wall slide
     on_wall_in_air := !player.on_ground && on_any_wall
@@ -147,10 +142,10 @@ player_update :: proc(dt: f32) {
     }
 
     friction := FRICTION if player.on_ground else AIR_FRICTION
-    if input_x == 0 && !player.wall_jump_locked {
+    if input_x == 0 && player.lock_timer <= 0 {
         if      player.vel.x > 0 { player.vel.x = max(player.vel.x - friction * dt, 0) }
         else if player.vel.x < 0 { player.vel.x = min(player.vel.x + friction * dt, 0) }
-    } else if !player.wall_jump_locked {
+    } else if player.lock_timer <= 0 {
         target := input_x * MOVE_SPEED
         if abs(player.vel.x) < abs(target) || sign(player.vel.x) != sign(target) {
             player.vel.x += input_x * ACCELERATION * dt
@@ -182,8 +177,7 @@ player_update :: proc(dt: f32) {
         player.squash_y           = 1.35
         player.squash_x           = 0.72
         player.squash_timer       = 0.15
-        player.wall_jump_locked   = true
-        player.wall_jump_lock_timer = 0.25
+        player.lock_timer         = 0.25
         spawn_particles(player.pos - {0, player.size.y/2}, 20, k2.Color{200, 220, 255, 200}, 200, 0.4, 4)
     }
 
