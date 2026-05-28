@@ -166,14 +166,15 @@ step :: proc() -> bool {
             k2.draw_text(best_str, {10, 40} + 1, 20, k2.Color{100, 50, 0, 255})
             k2.draw_text(best_str, {10, 40}, 20, k2.Color{255, 200, 100, 255})
         }
+    }
 
-        if is_speedruning {
-            sw := f32(1280.0)
-            sr_str := fmt.tprintf("%.2f", game_time)
-            sr_w := k2.measure_text(sr_str, 36, k2.FONT_DEFAULT).x
-            k2.draw_text(sr_str, {sw/2.0 - sr_w/2.0, 10}+1, 36, k2.BLACK)
-            k2.draw_text(sr_str, {sw/2.0 - sr_w/2.0, 10}, 36, k2.WHITE)
-        }
+    k2.set_camera(ui_camera())
+    if is_speedruning {
+        sw := f32(1280.0)
+        sr_str := fmt.tprintf("%.2f", game_time)
+        sr_w := k2.measure_text(sr_str, 36, k2.FONT_DEFAULT).x
+        k2.draw_text(sr_str, {sw/2.0 - sr_w/2.0, 10}+1, 36, k2.BLACK)
+        k2.draw_text(sr_str, {sw/2.0 - sr_w/2.0, 10}, 36, k2.WHITE)
     }
 
     update_transition(dt)
