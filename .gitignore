@@ -1,0 +1,5 @@
+bin/
+build/
+*.exe
+settings.dat
+custom_level.txt
