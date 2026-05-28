@@ -53,9 +53,8 @@ editor_save_map :: proc() {
 }
 
 editor_load_map :: proc() -> bool {
-    data, err := os.read_entire_file_from_path("custom_level.txt", context.allocator)
+    data, err := os.read_entire_file_from_path("custom_level.txt", context.temp_allocator)
     if err != nil do return false
-    defer delete(data, context.allocator)
     if len(data) != size_of(editor_map) do return false
     mem.copy(&editor_map, raw_data(data), size_of(editor_map))
     return true

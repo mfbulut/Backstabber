@@ -58,7 +58,7 @@ step_editor :: proc(dt: f32) {
         mouse_pos := k2.get_mouse_position()
         world_before := editor_camera.target + mouse_pos / editor_camera.zoom
 
-        editor_camera.zoom = math.lerp(editor_camera.zoom, editor_target_zoom, dt * 15.0)
+        editor_camera.zoom = math.lerp(editor_camera.zoom, editor_target_zoom, dt * 50.0)
 
         editor_camera.target = world_before - mouse_pos / editor_camera.zoom
     }
@@ -302,6 +302,7 @@ draw_editor_ui :: proc() {
     if draw_button("BACK", {log_x + log_w - 280, by, 120, 40}) || k2.key_went_down(.Escape) {
         editor_save_map()
         target_slide_x = 0.0
+        is_editor_play = false
         game_state = .MainMenu
     }
 
