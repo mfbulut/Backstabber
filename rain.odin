@@ -148,15 +148,12 @@ rain_draw :: proc() {
     dx := math.sin(RAIN_ANGLE)
     dy := math.cos(RAIN_ANGLE)
 
-    // Max bounding box expansion from drop length — no per-drop trig needed
-    max_extent := RAIN_DROP_H_MAX
-
     for i in 0..<RAIN_DROP_COUNT {
         d := &rain_drops[i]
         if !d.active { continue }
 
-        if d.pos.x + max_extent < view_min.x || d.pos.x > view_max.x ||
-           d.pos.y + max_extent < view_min.y || d.pos.y > view_max.y {
+        if d.pos.x + RAIN_DROP_H_MAX < view_min.x || d.pos.x > view_max.x ||
+           d.pos.y + RAIN_DROP_H_MAX < view_min.y || d.pos.y > view_max.y {
             continue
         }
 

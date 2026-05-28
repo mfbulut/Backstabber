@@ -6,7 +6,7 @@ import "core:math/linalg"
 import k2 "karl2d"
 
 PORTAL_RADIUS        :: f32(130)
-SLINGSHOT_RADIUS     :: f32(120)
+SLINGSHOT_RADIUS     :: f32(130)
 SLINGSHOT_SPEED      :: k2.Vec2{600 * 1, 600 * 1.3}
 PORTAL_SPIRAL_SPEED  :: f32(1.2)
 PORTAL_PULL_DURATION :: f32(0.3)
