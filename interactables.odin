@@ -99,7 +99,7 @@ interactables_init :: proc() {
 }
 
 find_nearest_interactable :: proc(world_pos: k2.Vec2) -> (is_portal: bool, index: int, dist: f32) {
-    best_dist := f32(9999.0)
+    best_dist := f32(1e6)
     best_is_portal := false
     best_index := -1
 
