@@ -279,8 +279,18 @@ interactables_draw :: proc() {
         k2.draw_circle_outline(player_center, max_radius, 1.2, ring, 36)
 
         if ps.is_portal {
-            line := col; line.a = u8(50 + int(pulse * 40))
-            k2.draw_line(player_center, target_pos, 1.0, line)
+            mouse_world := k2.screen_to_world(k2.get_mouse_position(), camera)
+            dir := mouse_world - player_center
+            dist := linalg.length(dir)
+            if dist > 0.001 {
+                dir /= dist
+            } else {
+                dir = {1, 0}
+            }
+
+            end_pos := player_center + dir * min(dist, PORTAL_RADIUS)
+            aim_line := col; aim_line.a = 220
+            k2.draw_line(player_center, end_pos, 1.5, aim_line)
         } else {
             mouse_world := k2.screen_to_world(k2.get_mouse_position(), camera)
             dir := mouse_world - player_center
