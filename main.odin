@@ -136,7 +136,7 @@ step :: proc() -> bool {
 
         sw := k2.get_screen_size().x
         sh := k2.get_screen_size().y
-        camera.zoom = min(sw / 1280.0, sh / 720.0) * 0.8
+        camera.zoom = min(sw / 1280.0, sh / 720.0) * 0.85
 
         offset := k2.get_screen_size() / (2.0 * camera.zoom)
         target_cam := player.pos - offset
