@@ -6,6 +6,8 @@ import "core:math/linalg"
 import k2 "karl2d"
 
 PORTAL_RADIUS        :: f32(130)
+SLINGSHOT_RADIUS     :: f32(120)
+SLINGSHOT_SPEED      :: k2.Vec2{600 * 1, 600 * 1.3}
 PORTAL_SPIRAL_SPEED  :: f32(1.2)
 PORTAL_PULL_DURATION :: f32(0.3)
 PORTAL_EXIT_SPEED    :: f32(650)
@@ -97,13 +99,13 @@ interactables_init :: proc() {
 }
 
 find_nearest_interactable :: proc(world_pos: k2.Vec2) -> (is_portal: bool, index: int, dist: f32) {
-    best_dist := PORTAL_RADIUS
+    best_dist := f32(9999.0)
     best_is_portal := false
     best_index := -1
 
     for p, i in portals {
         d := linalg.length(p.world_pos - world_pos)
-        if d < best_dist {
+        if d < best_dist && d <= PORTAL_RADIUS {
             best_dist = d
             best_is_portal = true
             best_index = i
@@ -113,7 +115,7 @@ find_nearest_interactable :: proc(world_pos: k2.Vec2) -> (is_portal: bool, index
     for s, i in slingshots {
         if s.broken { continue }
         d := linalg.length(s.world_pos - world_pos)
-        if d < best_dist {
+        if d < best_dist && d <= SLINGSHOT_RADIUS {
             best_dist = d
             best_is_portal = false
             best_index = i
@@ -160,7 +162,11 @@ interactables_update :: proc(real_dt: f32) {
                 else { target_pos = slingshots[ps.target_index].world_pos }
             }
 
-            if linalg.length(target_pos - player_center) > PORTAL_RADIUS * 1.2 { ps.aiming = false }
+            if ps.is_portal {
+                if linalg.length(target_pos - player_center) > PORTAL_RADIUS * 1.2 { ps.aiming = false }
+            } else {
+                if linalg.length(target_pos - player_center) > SLINGSHOT_RADIUS * 1.2 { ps.aiming = false }
+            }
 
             if k2.mouse_button_went_up(.Left) && ps.aiming {
                 mouse_world  := k2.screen_to_world(k2.get_mouse_position(), camera)
@@ -179,7 +185,7 @@ interactables_update :: proc(real_dt: f32) {
                     ps.exit_dir     = dir
                 } else {
                     ps.aiming = false
-                    player.vel = dir * (650 * k2.Vec2{1, 1.3})
+                    player.vel = dir * SLINGSHOT_SPEED
 
                     if slingshots[ps.target_index].breakable {
                         slingshots[ps.target_index].broken = true
@@ -262,11 +268,13 @@ interactables_draw :: proc() {
 
         pulse := 0.5 + 0.5 * math.sin(t * 3.0)
 
+        max_radius := PORTAL_RADIUS if ps.is_portal else SLINGSHOT_RADIUS
+
         fill := col; fill.a = u8(10 + int(pulse * 8))
-        k2.draw_circle(player_center, PORTAL_RADIUS, fill, 36)
+        k2.draw_circle(player_center, max_radius, fill, 36)
 
         ring := col; ring.a = u8(70 + int(pulse * 55))
-        k2.draw_circle_outline(player_center, PORTAL_RADIUS, 1.2, ring, 36)
+        k2.draw_circle_outline(player_center, max_radius, 1.2, ring, 36)
 
         if ps.is_portal {
             line := col; line.a = u8(50 + int(pulse * 40))
@@ -281,7 +289,7 @@ interactables_draw :: proc() {
                 dir = {1, 0}
             }
 
-            end_pos := player_center + dir * min(dist, PORTAL_RADIUS)
+            end_pos := player_center + dir * min(dist, SLINGSHOT_RADIUS)
             line := col; line.a = 220
             k2.draw_line(player_center, end_pos, 1.5, line)
             k2.draw_circle(end_pos, 4, k2.Color{255, 100, 50, 255})
@@ -354,7 +362,7 @@ interactables_draw :: proc() {
         cy   := s.world_pos.y
         col  := s.breakable ? SLINGSHOT_COLOR_BREAK : SLINGSHOT_COLOR_NORMAL
         dist := linalg.length(s.world_pos - player_center)
-        near := dist <= PORTAL_RADIUS
+        near := dist <= SLINGSHOT_RADIUS
 
         pulse: f32
         if near { pulse = 0.5 + 0.5 * math.sin(t * 4.0) }
