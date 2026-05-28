@@ -4,6 +4,9 @@
 
 Originally created in a 48-hour game jam, the game has since been expanded with major improvements including fullscreen support, a built-in level editor, visual upgrades, new levels, and additional gameplay mechanics.
 
+* [Play on Browser](https://backstabbergame.netlify.app/)
+* [Download (windows_x64, 720kb)](https://github.com/mfbulut/Backstabber/releases/latest)
+
 ## Controls
 
 | Action             | Key                   |
@@ -20,4 +23,4 @@ Originally created in a 48-hour game jam, the game has since been expanded with 
 
 ## Roadmap
 
-- [] Gamepad support
+- Gamepad support
