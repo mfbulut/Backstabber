@@ -16,6 +16,10 @@ Originally created in a 48-hour game jam, the game has since been expanded with 
 | Dash / Use Portals | **Left Mouse Button** |
 | Restart Level      | **R**                 |
 
+
+<img src="https://github.com/user-attachments/assets/0daca7fd-25bc-463f-91dd-5b9f761d500e" />
+<img src="https://github.com/user-attachments/assets/38af39c3-0b26-4c7a-bffe-35a215bb3f66" />
+
 ## Credits
 
 * Music made by Ercan
