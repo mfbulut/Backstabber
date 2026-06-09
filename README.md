@@ -6,6 +6,7 @@ Originally created in a 48-hour game jam, the game has since been expanded with 
 
 * [Play on Browser](https://backstabbergame.netlify.app/)
 * [Download (Windows_x64_86)](https://github.com/mfbulut/Backstabber/releases/latest)
+* [itch.io](https://mfbulut.itch.io/backstabber)
 
 ## Controls
 
